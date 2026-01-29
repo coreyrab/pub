@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { deleteArtifact, readArtifact, readMetadata } from "../storage.js";
+import { wrapHtmlWithBanner, wrapMarkdownWithBanner } from "../banner.js";
 
 const ULID_RE = /^[0-9A-Z]{26}$/i;
 
@@ -27,6 +28,23 @@ serveRoute.get("/:id", async (c) => {
   const content = await readArtifact(id);
   if (!content) {
     return c.json({ error: "Not found" }, 404);
+  }
+
+  // Inject branding banner for renderable content types
+  if (meta.content_type === "text/html") {
+    const html = wrapHtmlWithBanner(content.toString("utf-8"));
+    return c.html(html, 200, {
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "public, max-age=3600",
+    });
+  }
+
+  if (meta.content_type === "text/markdown") {
+    const html = wrapMarkdownWithBanner(content.toString("utf-8"));
+    return c.html(html, 200, {
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "public, max-age=3600",
+    });
   }
 
   return new Response(new Uint8Array(content), {

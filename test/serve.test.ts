@@ -78,4 +78,59 @@ describe("GET /a/:id", () => {
     const res = await app.request("/a/NOT-A-VALID-ULID!");
     expect(res.status).toBe(400);
   });
+
+  it("injects branding banner into HTML artifacts", async () => {
+    const meta: ArtifactMeta = {
+      artifact_id: VALID_ID,
+      content_type: "text/html",
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + 3600_000).toISOString(),
+      size_bytes: 28,
+    };
+    await writeArtifact(VALID_ID, Buffer.from("<html><body>hi</body></html>"), meta);
+
+    const app = createApp();
+    const res = await app.request(`/a/${VALID_ID}`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toContain("text/html");
+    const body = await res.text();
+    expect(body).toContain("pubit.ai");
+    expect(body).toContain("hi");
+  });
+
+  it("wraps markdown artifacts in HTML with banner", async () => {
+    const meta: ArtifactMeta = {
+      artifact_id: VALID_ID,
+      content_type: "text/markdown",
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + 3600_000).toISOString(),
+      size_bytes: 7,
+    };
+    await writeArtifact(VALID_ID, Buffer.from("# Hello"), meta);
+
+    const app = createApp();
+    const res = await app.request(`/a/${VALID_ID}`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toContain("text/html");
+    const body = await res.text();
+    expect(body).toContain("pubit.ai");
+    expect(body).toContain("# Hello");
+  });
+
+  it("does not inject banner into plain text artifacts", async () => {
+    const meta: ArtifactMeta = {
+      artifact_id: VALID_ID,
+      content_type: "text/plain",
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() + 3600_000).toISOString(),
+      size_bytes: 5,
+    };
+    await writeArtifact(VALID_ID, Buffer.from("hello"), meta);
+
+    const app = createApp();
+    const res = await app.request(`/a/${VALID_ID}`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get("Content-Type")).toBe("text/plain");
+    expect(await res.text()).toBe("hello");
+  });
 });

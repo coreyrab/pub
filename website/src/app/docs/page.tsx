@@ -1,0 +1,270 @@
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
+
+export default function DocsQuickstart() {
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="font-mono text-2xl font-bold tracking-tight">
+          Quickstart
+        </h1>
+        <p className="mt-2 font-mono text-sm text-muted-foreground">
+          Go from zero to a shareable link in under a minute.
+        </p>
+      </div>
+
+      <Separator />
+
+      {/* What is pub */}
+      <section className="space-y-3">
+        <h2 className="font-mono text-lg font-semibold">What is pub?</h2>
+        <p className="font-mono text-sm leading-relaxed text-muted-foreground">
+          pub is a publishing primitive for AI coding agents. You give it
+          content — markdown, HTML, images, PDFs, plain text — and it gives you
+          back a temporary, shareable URL.
+        </p>
+        <p className="font-mono text-sm leading-relaxed text-muted-foreground">
+          The primary interface is{" "}
+          <span className="text-foreground font-medium">
+            natural language through your coding agent
+          </span>
+          . You say{" "}
+          <span className="text-foreground font-medium">
+            &quot;share this as a link&quot;
+          </span>{" "}
+          and pub handles the rest. There&apos;s also a direct HTTP API for
+          programmatic use.
+        </p>
+      </section>
+
+      <Separator />
+
+      {/* Setup with Claude Code */}
+      <section className="space-y-4">
+        <h2 className="font-mono text-lg font-semibold">
+          Setup with Claude Code
+        </h2>
+        <p className="font-mono text-sm text-muted-foreground">
+          The fastest way to start using pub is with{" "}
+          <a
+            href="https://claude.ai/code"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-tomato hover:underline"
+          >
+            Claude Code
+          </a>
+          . Add the pub{" "}
+          <code className="rounded bg-secondary px-1.5 py-0.5 text-xs">
+            CLAUDE.md
+          </code>{" "}
+          to your project and Claude will know how to publish artifacts.
+        </p>
+
+        <div className="space-y-2">
+          <p className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Step 1 — Add CLAUDE.md to your project
+          </p>
+          <pre className="overflow-x-auto rounded-lg bg-[#0A0A0A] p-4 font-mono text-sm leading-relaxed">
+            <code>
+              <span className="text-white/50">
+                {"# Download the pub CLAUDE.md into your project"}
+              </span>
+              {"\n"}
+              <span className="text-green-400">curl</span>
+              <span className="text-white">
+                {
+                  " -o CLAUDE.md https://raw.githubusercontent.com/coreyrab/pub/main/CLAUDE.md"
+                }
+              </span>
+            </code>
+          </pre>
+          <p className="font-mono text-xs text-muted-foreground">
+            This file teaches Claude Code how and when to use pub. It includes
+            the API contract, content types, and publishing guidelines.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <p className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Step 2 — Ask Claude to publish something
+          </p>
+          <Card className="bg-[#0A0A0A] border-white/10">
+            <CardContent className="pt-4">
+              <div className="space-y-4 font-mono text-sm">
+                <div>
+                  <span className="text-white/40">{">"}</span>
+                  <span className="text-white">
+                    {" Generate a summary of this project and share it as a link"}
+                  </span>
+                </div>
+                <div className="border-l-2 border-white/10 pl-4 space-y-2">
+                  <p className="text-white/70">
+                    I&apos;ve generated a project summary and published it with
+                    pub.
+                  </p>
+                  <p className="text-white/70">Here&apos;s your link:</p>
+                  <p className="text-green-400 underline underline-offset-2">
+                    https://pubit.ai/a/01JABCDEFG
+                  </p>
+                  <p className="text-white/50 text-xs">
+                    Expires in 7 days. Anyone with the link can view it.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="space-y-2">
+          <p className="font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Things you can say
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {[
+              "Share this report as a link",
+              "Publish this HTML preview",
+              "Give me a link to this markdown",
+              "Make this viewable for my team",
+              "Put this somewhere I can send it",
+              "Preview this in the browser",
+            ].map((prompt) => (
+              <div
+                key={prompt}
+                className="rounded-md border border-border bg-secondary/50 px-3 py-2 font-mono text-xs text-muted-foreground"
+              >
+                &quot;{prompt}&quot;
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
+      {/* Direct API */}
+      <section className="space-y-3">
+        <h2 className="font-mono text-lg font-semibold">
+          Direct API usage
+        </h2>
+        <p className="font-mono text-sm text-muted-foreground">
+          You can also call the pub API directly from any HTTP client, script,
+          or CI pipeline.
+        </p>
+        <pre className="overflow-x-auto rounded-lg bg-[#0A0A0A] p-4 font-mono text-sm leading-relaxed">
+          <code>
+            <span className="text-white">
+              {"curl -X POST https://pubit.ai/v1/publish \\"}
+            </span>
+            {"\n"}
+            <span className="text-white">{"  -H "}</span>
+            <span className="text-green-400">
+              {'"Content-Type: application/json"'}
+            </span>
+            <span className="text-white">{" \\"}</span>
+            {"\n"}
+            <span className="text-white">{"  -d "}</span>
+            <span className="text-green-400">{"'{"}</span>
+            {"\n"}
+            <span className="text-green-400">
+              {'    "content": "# My Report\\n\\nHello, world!",'}
+            </span>
+            {"\n"}
+            <span className="text-green-400">
+              {'    "content_type": "text/markdown"'}
+            </span>
+            {"\n"}
+            <span className="text-green-400">{"  }'"}</span>
+          </code>
+        </pre>
+        <p className="font-mono text-sm text-muted-foreground">
+          See the{" "}
+          <a
+            href="/docs/api"
+            className="text-tomato hover:underline"
+          >
+            API Reference
+          </a>{" "}
+          for the full request/response schema.
+        </p>
+      </section>
+
+      <Separator />
+
+      {/* Self-hosting */}
+      <section className="space-y-3">
+        <h2 className="font-mono text-lg font-semibold">Self-hosting</h2>
+        <p className="font-mono text-sm text-muted-foreground">
+          pub is open source. To run your own instance:
+        </p>
+        <pre className="overflow-x-auto rounded-lg bg-[#0A0A0A] p-4 font-mono text-sm leading-relaxed">
+          <code>
+            <span className="text-green-400">git clone</span>
+            <span className="text-white">
+              {" https://github.com/coreyrab/pub.git"}
+            </span>
+            {"\n"}
+            <span className="text-green-400">cd</span>
+            <span className="text-white"> pub</span>
+            {"\n"}
+            <span className="text-green-400">npm install</span>
+            {"\n"}
+            <span className="text-green-400">npm run dev</span>
+            {"\n\n"}
+            <span className="text-white/50">
+              {"# → pub listening on http://localhost:3000"}
+            </span>
+          </code>
+        </pre>
+        <p className="font-mono text-xs text-muted-foreground">
+          Set{" "}
+          <code className="rounded bg-secondary px-1.5 py-0.5 text-[10px]">
+            PUB_BASE_URL
+          </code>{" "}
+          to your domain and update the endpoint in your{" "}
+          <code className="rounded bg-secondary px-1.5 py-0.5 text-[10px]">
+            CLAUDE.md
+          </code>{" "}
+          to point to your instance.
+        </p>
+      </section>
+
+      <Separator />
+
+      {/* Supported content types */}
+      <section className="space-y-3">
+        <h2 className="font-mono text-lg font-semibold">
+          Supported content types
+        </h2>
+        <div className="flex flex-wrap gap-2">
+          {[
+            "text/plain",
+            "text/markdown",
+            "text/html",
+            "application/pdf",
+            "image/png",
+            "image/jpeg",
+            "image/webp",
+          ].map((ct) => (
+            <Badge
+              key={ct}
+              variant="secondary"
+              className="font-mono text-xs"
+            >
+              {ct}
+            </Badge>
+          ))}
+        </div>
+        <p className="font-mono text-sm text-muted-foreground">
+          Binary types (PDF, images) should be sent as base64-encoded strings in
+          the{" "}
+          <code className="rounded bg-secondary px-1.5 py-0.5 text-xs">
+            content
+          </code>{" "}
+          field.
+        </p>
+      </section>
+    </div>
+  );
+}
