@@ -1,0 +1,76 @@
+import { Hono } from "hono";
+import { ulid } from "ulid";
+import { CONFIG } from "../config.js";
+import { writeArtifact } from "../storage.js";
+import type { ArtifactMeta, PublishRequest, PublishResponse } from "../types.js";
+
+export const publishRoute = new Hono();
+
+publishRoute.post("/publish", async (c) => {
+  let body: PublishRequest;
+  try {
+    body = await c.req.json<PublishRequest>();
+  } catch {
+    return c.json({ error: "Invalid JSON body" }, 400);
+  }
+
+  // Validate content
+  if (typeof body.content !== "string" || body.content.length === 0) {
+    return c.json({ error: "content is required and must be a non-empty string" }, 400);
+  }
+
+  // Resolve content type
+  const contentType = body.content_type || "text/plain";
+  if (!CONFIG.ALLOWED_CONTENT_TYPES.has(contentType)) {
+    return c.json({ error: `Unsupported content type: ${contentType}` }, 415);
+  }
+
+  // Resolve TTL
+  const ttl = body.ttl_seconds ?? CONFIG.DEFAULT_TTL_SECONDS;
+  if (!Number.isInteger(ttl) || ttl <= 0 || ttl > CONFIG.MAX_TTL_SECONDS) {
+    return c.json(
+      { error: `ttl_seconds must be an integer between 1 and ${CONFIG.MAX_TTL_SECONDS}` },
+      400,
+    );
+  }
+
+  // Decode content
+  const isBinary = CONFIG.BINARY_CONTENT_TYPES.has(contentType);
+  let contentBuffer: Buffer;
+  try {
+    contentBuffer = isBinary
+      ? Buffer.from(body.content, "base64")
+      : Buffer.from(body.content, "utf-8");
+  } catch {
+    return c.json({ error: "Failed to decode content" }, 400);
+  }
+
+  // Check size
+  if (contentBuffer.length > CONFIG.MAX_PAYLOAD_BYTES) {
+    return c.json({ error: "Payload too large" }, 413);
+  }
+
+  // Generate ID and timestamps
+  const artifactId = ulid();
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + ttl * 1000);
+
+  const meta: ArtifactMeta = {
+    artifact_id: artifactId,
+    content_type: contentType,
+    created_at: now.toISOString(),
+    expires_at: expiresAt.toISOString(),
+    size_bytes: contentBuffer.length,
+  };
+
+  await writeArtifact(artifactId, contentBuffer, meta);
+
+  const response: PublishResponse = {
+    artifact_id: artifactId,
+    url: `${CONFIG.BASE_URL}/a/${artifactId}`,
+    expires_at: meta.expires_at,
+    content_type: contentType,
+  };
+
+  return c.json(response, 201);
+});
