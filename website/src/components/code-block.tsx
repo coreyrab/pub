@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const EXAMPLE_URL = "https://pubthis.co/a/01KG8A22R05WAR5W5KJS6GMKST";
+const EXAMPLE_URL = "https://pubthis.co/a/01KG8A85C4V3PGEA4WHB24SJT0";
 
 export function CodeBlock() {
   const chatRef = useRef<HTMLDivElement>(null);
