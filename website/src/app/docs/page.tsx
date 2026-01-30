@@ -16,11 +16,11 @@ export default function DocsQuickstart() {
 
       <Separator />
 
-      {/* What is pub */}
+      {/* What is pubthis */}
       <section className="space-y-3">
-        <h2 className="font-mono text-lg font-semibold">What is pub?</h2>
+        <h2 className="font-mono text-lg font-semibold">What is pubthis?</h2>
         <p className="font-mono text-sm leading-relaxed text-muted-foreground">
-          pub is a publishing primitive for AI coding agents. You give it
+          pubthis is a publishing primitive for AI coding agents. You give it
           content — markdown, HTML, images, PDFs, plain text — and it gives you
           back a temporary, shareable URL.
         </p>
