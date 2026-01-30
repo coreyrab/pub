@@ -31,8 +31,8 @@ function CopyButton({ text }: { text: string }) {
 export function InstallSteps() {
   return (
     <div className="mx-auto max-w-4xl px-6 pb-10">
-      <h2 className="font-mono text-sm text-white/70 uppercase tracking-wider mb-3">
-        Install
+      <h2 className="font-mono text-base font-semibold text-white tracking-wide mb-3">
+        How to install
       </h2>
       <div className="rounded-xl border border-white/10 bg-[#0d0d0d] overflow-hidden divide-y divide-white/10">
         {steps.map((step) => (

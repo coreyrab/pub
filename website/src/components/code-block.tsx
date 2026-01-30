@@ -16,6 +16,9 @@ export function CodeBlock() {
 
   return (
     <section className="mx-auto max-w-4xl px-6 pb-20">
+      <h2 className="font-mono text-base font-semibold text-white tracking-wide mb-3">
+        How to use
+      </h2>
       <style>{`
         .chat-scroll::-webkit-scrollbar { width: 6px; }
         .chat-scroll::-webkit-scrollbar-track { background: transparent; }
@@ -27,9 +30,9 @@ export function CodeBlock() {
         {/* Title bar */}
         <div className="flex items-center border-b border-white/10 px-4 py-3">
           <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-white/20" />
-            <span className="h-3 w-3 rounded-full bg-white/20" />
-            <span className="h-3 w-3 rounded-full bg-white/20" />
+            <span className="h-3 w-3 rounded-full bg-[#FF5F56]" />
+            <span className="h-3 w-3 rounded-full bg-[#FFBD2E]" />
+            <span className="h-3 w-3 rounded-full bg-[#27C93F]" />
           </div>
           <span className="ml-4 font-mono text-xs text-white/40">
             claude code
