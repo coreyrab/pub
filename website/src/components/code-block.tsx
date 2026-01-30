@@ -42,123 +42,76 @@ export function CodeBlock() {
           <div className="mb-6">
             <span className="text-white/40">&gt; </span>
             <span className="text-white">
-              What is pub and how do I use it?
+              Write a quick project status update for the team. Cover what we shipped this week, what&apos;s in progress, and blockers.
             </span>
           </div>
 
-          {/* Claude response 1 */}
+          {/* Claude response 1 — a real work output */}
           <div className="mb-6 space-y-4 text-white/70">
-            <p>
-              <span className="text-white/90 font-semibold">/pub</span> is a
-              publishing primitive for AI agents. It takes any content —
-              markdown, HTML, images, PDFs — and returns a temporary, shareable
-              URL.
-            </p>
-            <p>
-              Think of it as{" "}
-              <span className="text-white/90">ngrok for AI artifacts.</span>
-            </p>
-            <p>
-              You&apos;re working with an AI coding agent. It generates a
-              report, a preview, an analysis. You want to share it — paste it
-              into Slack, send it to a colleague, open it on your phone. /pub
-              gives you a link in seconds.
+            <p className="text-white/90 font-semibold">
+              # Weekly Status — Jan 27–31
             </p>
 
-            <p className="text-white/50 text-xs mt-2 mb-1">How it works:</p>
-            <pre className="text-white/50 text-xs leading-snug overflow-x-auto">{`  ┌─────────────┐    POST /v1/publish    ┌─────────────┐
-  │ Claude Code  │ ────────────────────▸ │   pub API    │
-  │ (or any      │                       │  pubthis.co  │
-  │  agent)      │ ◂──────────────────── │              │
-  └─────────────┘   { url, expires_at }  └──────┬───────┘
-                                                │
-                                          GET /a/:id
-                                                │
-                                         ┌──────▾──────┐
-                                         │   Browser    │
-                                         │  (anyone)    │
-                                         └─────────────┘`}</pre>
-
-            <div className="space-y-1">
-              <p>
-                <span className="text-white/50">1.</span> Your agent sends
-                content to the /pub API
-              </p>
-              <p>
-                <span className="text-white/50">2.</span> The API stores it and
-                returns a shareable URL
-              </p>
-              <p>
-                <span className="text-white/50">3.</span> Anyone with the link
-                can view the rendered content
-              </p>
-              <p>
-                <span className="text-white/50">4.</span> The link expires
-                automatically (default: 7 days)
-              </p>
+            <div>
+              <p className="text-white/80 font-semibold">Shipped</p>
+              <div className="space-y-0.5 mt-1">
+                <p>
+                  <span className="text-white/50">•</span> User auth flow
+                  redesign — login, signup, and password reset all use the new
+                  layout. 40% faster load time on mobile.
+                </p>
+                <p>
+                  <span className="text-white/50">•</span> Webhook retry logic
+                  — failed deliveries now retry 3x with exponential backoff.
+                  Cut dropped events from ~12% to &lt;0.5%.
+                </p>
+                <p>
+                  <span className="text-white/50">•</span> Dashboard CSV export
+                  — users can export filtered data from any dashboard view.
+                </p>
+              </div>
             </div>
 
-            <p>
-              No deploy. No hosting. No setup. Just content → URL.
-            </p>
-
-            <p className="text-white/50 text-xs mt-2 mb-1">
-              Supported formats:
-            </p>
-            <div className="space-y-0.5 text-xs">
-              <p>
-                <span className="text-white/60">text/markdown</span>
-                <span className="text-white/40">
-                  {" "}— reports, docs, specs
-                </span>
-              </p>
-              <p>
-                <span className="text-white/60">text/html</span>
-                <span className="text-white/40">
-                  {" "}— previews, prototypes
-                </span>
-              </p>
-              <p>
-                <span className="text-white/60">text/plain</span>
-                <span className="text-white/40"> — logs, raw output</span>
-              </p>
-              <p>
-                <span className="text-white/60">image/*</span>
-                <span className="text-white/40">
-                  {" "}— screenshots, diagrams
-                </span>
-              </p>
+            <div>
+              <p className="text-white/80 font-semibold">In Progress</p>
+              <div className="space-y-0.5 mt-1">
+                <p>
+                  <span className="text-white/50">•</span> API rate limiting
+                  (v2) — new sliding window implementation. On track for
+                  Wednesday.
+                </p>
+                <p>
+                  <span className="text-white/50">•</span> Billing migration
+                  — Stripe integration tests passing, need QA on edge cases
+                  (prorations, plan downgrades).
+                </p>
+              </div>
             </div>
 
-            <p>
-              To publish from Claude Code, just ask:{" "}
-              <span className="text-white/50 italic">
-                &quot;Share this report as a link&quot;
-              </span>{" "}
-              or{" "}
-              <span className="text-white/50 italic">
-                &quot;Publish this analysis&quot;
-              </span>
-            </p>
-
-            <p>
-              Claude calls the API, publishes your content, and hands you back
-              the link. That&apos;s it.
-            </p>
+            <div>
+              <p className="text-white/80 font-semibold">Blockers</p>
+              <div className="space-y-0.5 mt-1">
+                <p>
+                  <span className="text-white/50">•</span> Waiting on
+                  design sign-off for the settings page rework. Pinged Sarah —
+                  should have mocks by Monday.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* User prompt 2 */}
           <div className="mb-6">
             <span className="text-white/40">&gt; </span>
             <span className="text-white">
-              Publish that as a shareable link
+              /pub
             </span>
           </div>
 
           {/* Claude response 2 — the publish result */}
           <div className="space-y-2 text-white/70">
             <p>
-              I&apos;ve published your document. Here&apos;s the link:
+              Published your status update. Here&apos;s the link:
             </p>
             <p>
               <a
@@ -171,7 +124,7 @@ export function CodeBlock() {
               </a>
             </p>
             <p>
-              It will expire in 7 days. Anyone with the link can view it.
+              Expires in 7 days. Anyone with the link can view it.
             </p>
           </div>
 
