@@ -1,4 +1,4 @@
-# /pub — Claude Code Plugin
+# `/pub` — Claude Code Plugin
 
 Publish artifacts directly from Claude Code. Get a temporary, shareable URL.
 
