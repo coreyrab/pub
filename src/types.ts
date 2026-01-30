@@ -4,6 +4,8 @@ export interface ArtifactMeta {
   created_at: string; // ISO 8601
   expires_at: string; // ISO 8601
   size_bytes: number;
+  og_title?: string;
+  og_description?: string;
 }
 
 export interface PublishRequest {

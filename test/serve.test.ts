@@ -86,8 +86,10 @@ describe("GET /a/:id", () => {
       created_at: new Date().toISOString(),
       expires_at: new Date(Date.now() + 3600_000).toISOString(),
       size_bytes: 28,
+      og_title: "Test Page",
+      og_description: "A test description",
     };
-    await writeArtifact(VALID_ID, Buffer.from("<html><body>hi</body></html>"), meta);
+    await writeArtifact(VALID_ID, Buffer.from("<html><head></head><body>hi</body></html>"), meta);
 
     const app = createApp();
     const res = await app.request(`/a/${VALID_ID}`);
@@ -96,15 +98,23 @@ describe("GET /a/:id", () => {
     const body = await res.text();
     expect(body).toContain("pubthis.co");
     expect(body).toContain("hi");
+    // OG meta tags
+    expect(body).toContain('og:title');
+    expect(body).toContain("Test Page");
+    expect(body).toContain('og:description');
+    expect(body).toContain("A test description");
+    expect(body).toContain('twitter:card');
   });
 
-  it("wraps markdown artifacts in HTML with banner", async () => {
+  it("wraps markdown artifacts in HTML with banner and OG tags", async () => {
     const meta: ArtifactMeta = {
       artifact_id: VALID_ID,
       content_type: "text/markdown",
       created_at: new Date().toISOString(),
       expires_at: new Date(Date.now() + 3600_000).toISOString(),
       size_bytes: 7,
+      og_title: "Hello",
+      og_description: "A markdown document",
     };
     await writeArtifact(VALID_ID, Buffer.from("# Hello"), meta);
 
@@ -115,6 +125,9 @@ describe("GET /a/:id", () => {
     const body = await res.text();
     expect(body).toContain("pubthis.co");
     expect(body).toContain("<h1>Hello</h1>");
+    expect(body).toContain('og:title');
+    expect(body).toContain("Hello");
+    expect(body).toContain('og:description');
   });
 
   it("does not inject banner into plain text artifacts", async () => {

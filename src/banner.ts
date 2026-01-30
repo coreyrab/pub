@@ -1,5 +1,37 @@
 import { marked } from "marked";
 
+export interface OgTags {
+  og_title?: string;
+  og_description?: string;
+  og_url?: string;
+}
+
+function buildOgMetaTags(og: OgTags): string {
+  const tags: string[] = [];
+  const title = og.og_title || "Shared via /pub";
+  const desc = og.og_description || "A shared document on pubthis.co";
+
+  // Open Graph
+  tags.push(`<meta property="og:title" content="${escapeAttr(title)}">`);
+  tags.push(`<meta property="og:description" content="${escapeAttr(desc)}">`);
+  tags.push(`<meta property="og:type" content="article">`);
+  tags.push(`<meta property="og:site_name" content="/pub">`);
+  if (og.og_url) {
+    tags.push(`<meta property="og:url" content="${escapeAttr(og.og_url)}">`);
+  }
+
+  // Twitter Card
+  tags.push(`<meta name="twitter:card" content="summary">`);
+  tags.push(`<meta name="twitter:title" content="${escapeAttr(title)}">`);
+  tags.push(`<meta name="twitter:description" content="${escapeAttr(desc)}">`);
+
+  return tags.join("");
+}
+
+function escapeAttr(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 const BANNER_STYLES = `
   position:fixed;bottom:0;left:0;right:0;height:32px;
   background:#000;color:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -12,16 +44,28 @@ const BANNER_HTML = `<div style="${BANNER_STYLES}">published with <a href="https
 const BODY_PADDING = `<style>body{padding-bottom:40px}</style>`;
 
 /**
- * Inject the pub banner into an existing HTML document.
- * Inserts before </body> if present, otherwise appends.
+ * Inject the pub banner and OG meta tags into an existing HTML document.
+ * Inserts OG tags before </head>, banner before </body>.
  */
-export function wrapHtmlWithBanner(html: string): string {
-  const payload = BODY_PADDING + BANNER_HTML;
-  const idx = html.toLowerCase().indexOf("</body>");
-  if (idx !== -1) {
-    return html.slice(0, idx) + payload + html.slice(idx);
+export function wrapHtmlWithBanner(html: string, og?: OgTags): string {
+  let result = html;
+
+  // Inject OG meta tags into <head>
+  if (og) {
+    const ogTags = buildOgMetaTags(og);
+    const headIdx = result.toLowerCase().indexOf("</head>");
+    if (headIdx !== -1) {
+      result = result.slice(0, headIdx) + ogTags + result.slice(headIdx);
+    }
   }
-  return html + payload;
+
+  // Inject banner before </body>
+  const payload = BODY_PADDING + BANNER_HTML;
+  const bodyIdx = result.toLowerCase().indexOf("</body>");
+  if (bodyIdx !== -1) {
+    return result.slice(0, bodyIdx) + payload + result.slice(bodyIdx);
+  }
+  return result + payload;
 }
 
 const MARKDOWN_STYLES = `
@@ -81,11 +125,12 @@ const MARKDOWN_STYLES = `
 `.replace(/\n/g, "");
 
 /**
- * Render markdown to a fully styled HTML page with the pub banner.
+ * Render markdown to a fully styled HTML page with the pub banner and OG meta tags.
  */
-export function wrapMarkdownWithBanner(markdown: string): string {
+export function wrapMarkdownWithBanner(markdown: string, og?: OgTags): string {
   const rendered = marked.parse(markdown, { async: false }) as string;
+  const ogTags = og ? buildOgMetaTags(og) : "";
 
   return `<!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${MARKDOWN_STYLES}</style></head><body>${rendered}${BANNER_HTML}</body></html>`;
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${ogTags}<style>${MARKDOWN_STYLES}</style></head><body>${rendered}${BANNER_HTML}</body></html>`;
 }

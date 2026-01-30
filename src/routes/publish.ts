@@ -4,6 +4,7 @@ import { CONFIG } from "../config.js";
 import { isDiskFull } from "../health.js";
 import { log } from "../logger.js";
 import { writeArtifact } from "../storage.js";
+import { extractOgMeta } from "../og.js";
 import type { ArtifactMeta, PublishRequest, PublishResponse } from "../types.js";
 
 export const publishRoute = new Hono();
@@ -64,12 +65,19 @@ publishRoute.post("/publish", async (c) => {
   const now = new Date();
   const expiresAt = new Date(now.getTime() + ttl * 1000);
 
+  // Extract OG metadata from text content
+  const og = !isBinary
+    ? extractOgMeta(body.content, contentType)
+    : extractOgMeta("", contentType);
+
   const meta: ArtifactMeta = {
     artifact_id: artifactId,
     content_type: contentType,
     created_at: now.toISOString(),
     expires_at: expiresAt.toISOString(),
     size_bytes: contentBuffer.length,
+    og_title: og.og_title,
+    og_description: og.og_description,
   };
 
   await writeArtifact(artifactId, contentBuffer, meta);
