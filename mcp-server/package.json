@@ -4,14 +4,16 @@
   "description": "MCP server for publishing artifacts to pubthis.co",
   "type": "module",
   "bin": {
-    "pubthis-mcp-server": "./dist/index.js"
+    "pubthis-mcp-server": "dist/index.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "tsc",
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.1",
@@ -20,7 +22,8 @@
   "devDependencies": {
     "@types/node": "^22.0.0",
     "tsx": "^4.19.0",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "vitest": "^4.0.18"
   },
   "keywords": [
     "mcp",
@@ -32,7 +35,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/coreyrab/pubthis.git",
+    "url": "git+https://github.com/coreyrab/pubthis.git",
     "directory": "mcp-server"
   }
 }
