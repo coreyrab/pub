@@ -33,7 +33,7 @@ function escapeAttr(s: string): string {
 }
 
 const BANNER_STYLES = `
-  position:fixed;bottom:0;left:0;right:0;height:32px;
+  position:fixed;top:0;left:0;right:0;height:32px;
   background:#000;color:#fff;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
   font-size:12px;display:flex;align-items:center;justify-content:center;
   gap:4px;z-index:2147483647;letter-spacing:0.02em;
@@ -54,20 +54,26 @@ export interface LocalBannerOpts {
   rawContent: string;
 }
 
+const LINK_STYLES = `
+  color:#fff;text-decoration:underline;text-underline-offset:2px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;
+  letter-spacing:0.02em;cursor:pointer;background:none;border:none;padding:0;
+`.replace(/\n/g, "");
+
 function buildLocalBannerHtml(opts: LocalBannerOpts): string {
   // Embed the raw content as base64 in a data attribute to avoid escaping issues
   const encodedContent = Buffer.from(opts.rawContent, "utf-8").toString("base64");
 
-  const script = `<script>(function(){var btn=document.getElementById('pub-share-btn');var state='ready';btn.addEventListener('click',function(){if(state==='ready'){state='sharing';btn.textContent='Sharing...';btn.style.opacity='0.6';btn.style.cursor='wait';var raw=atob(document.getElementById('pub-raw-content').dataset.content);fetch('${opts.publishUrl}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:raw,content_type:'${opts.contentType}'})}).then(function(r){return r.json()}).then(function(data){state='shared';btn.dataset.url=data.url;btn.textContent='\\u{1F4CB} Copy link';btn.style.opacity='1';btn.style.cursor='pointer';btn.style.borderColor='rgba(255,255,255,0.5)';navigator.clipboard.writeText(data.url)}).catch(function(){state='ready';btn.textContent='Share \\u2197';btn.style.opacity='1';btn.style.cursor='pointer'})}else if(state==='shared'){navigator.clipboard.writeText(btn.dataset.url).then(function(){var p=btn.textContent;btn.textContent='Copied!';setTimeout(function(){btn.textContent=p},1500)})}});btn.addEventListener('mouseenter',function(){if(state!=='sharing')btn.style.borderColor='rgba(255,255,255,0.6)'});btn.addEventListener('mouseleave',function(){if(state!=='sharing')btn.style.borderColor=state==='shared'?'rgba(255,255,255,0.5)':'rgba(255,255,255,0.3)'})})()</script>`;
+  // Share button centered. After publish: transforms into the actual URL link.
+  // Click the link → copies to clipboard, flashes "Copied!"
+  const script = `<script>(function(){var btn=document.getElementById('pub-share-btn');var link=document.getElementById('pub-link');var state='ready';btn.addEventListener('click',function(){if(state!=='ready')return;state='sharing';btn.textContent='Sharing...';btn.style.opacity='0.6';btn.style.cursor='wait';var raw=atob(document.getElementById('pub-raw-content').dataset.content);fetch('${opts.publishUrl}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:raw,content_type:'${opts.contentType}'})}).then(function(r){return r.json()}).then(function(data){state='shared';btn.style.display='none';link.style.display='inline';link.textContent=data.url;link.dataset.url=data.url;link.href=data.url;navigator.clipboard.writeText(data.url)}).catch(function(){state='ready';btn.textContent='Share \\u2197';btn.style.opacity='1';btn.style.cursor='pointer'})});link.addEventListener('click',function(e){e.preventDefault();navigator.clipboard.writeText(link.dataset.url).then(function(){var u=link.dataset.url;link.textContent='Copied!';setTimeout(function(){link.textContent=u},1500)})})})()</script>`;
 
   const hiddenData = `<div id="pub-raw-content" data-content="${encodedContent}" style="display:none"></div>`;
 
-  const LOCAL_BANNER_STYLES = BANNER_STYLES.replace("justify-content:center", "justify-content:space-between;padding:0 12px");
-
-  return `<div style="${LOCAL_BANNER_STYLES}"><button id="pub-share-btn" style="${SHARE_BTN_STYLES}">Share &#8599;</button><span>published with <a href="https://pubthis.co" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline;text-underline-offset:2px;">/pub</a></span></div>${hiddenData}${script}`;
+  return `<div style="${BANNER_STYLES}"><button id="pub-share-btn" style="${SHARE_BTN_STYLES}">Share &#8599;</button><a id="pub-link" href="#" style="${LINK_STYLES}display:none;"></a></div>${hiddenData}${script}`;
 }
 
-const BODY_PADDING = `<style>body{padding-bottom:40px}</style>`;
+const BODY_PADDING = `<style>body{padding-top:40px}</style>`;
 
 /**
  * Inject the pub banner and OG meta tags into an existing HTML document.
