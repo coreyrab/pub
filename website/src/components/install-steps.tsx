@@ -4,8 +4,9 @@ import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 
 const steps = [
-  { number: 1, command: "claude plugin install pubthis" },
-  { number: 2, command: "/pub" },
+  { number: 1, command: "claude plugin marketplace add coreyrab/pubthis" },
+  { number: 2, command: "claude plugin install pubthis" },
+  { number: 3, command: "/pub" },
 ];
 
 function CopyButton({ text }: { text: string }) {
