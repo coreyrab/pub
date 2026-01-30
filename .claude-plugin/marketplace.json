@@ -1,0 +1,23 @@
+{
+  "name": "pubthis",
+  "owner": {
+    "name": "Corey Rabazinski"
+  },
+  "metadata": {
+    "description": "Publish content from Claude Code and get a temporary, shareable URL.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "pubthis",
+      "source": "./plugin",
+      "description": "Publish artifacts from Claude Code to pubthis.co — get temporary shareable URLs for chats, markdown, HTML, and more.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Corey Rabazinski"
+      },
+      "category": "productivity",
+      "tags": ["publishing", "sharing", "mcp", "artifacts"]
+    }
+  ]
+}
