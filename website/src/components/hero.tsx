@@ -16,8 +16,7 @@ export function Hero() {
       </h1>
       <p className="mt-4 max-w-lg font-mono text-base text-muted-foreground leading-relaxed">
         Publish chats, markdown files, prototypes, and documents straight from
-        Claude Code. Get a temporary, shareable link — perfect for quick sharing
-        with your team.
+        Claude Code. Get a temporary, shareable link to share.
       </p>
     </section>
   );

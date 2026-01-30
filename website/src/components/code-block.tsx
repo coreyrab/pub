@@ -19,9 +19,9 @@ export function CodeBlock() {
       <style>{`
         .chat-scroll::-webkit-scrollbar { width: 6px; }
         .chat-scroll::-webkit-scrollbar-track { background: transparent; }
-        .chat-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
-        .chat-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
-        .chat-scroll { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.15) transparent; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.35); border-radius: 3px; }
+        .chat-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.5); }
+        .chat-scroll { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.35) transparent; }
       `}</style>
       <div className="overflow-hidden rounded-lg border border-border bg-[#0A0A0A]">
         {/* Title bar */}
