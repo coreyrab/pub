@@ -5,6 +5,7 @@ import { isDiskFull } from "../health.js";
 import { log } from "../logger.js";
 import { writeArtifact } from "../storage.js";
 import { extractOgMeta } from "../og.js";
+import { op } from "../analytics.js";
 import type { ArtifactMeta, PublishRequest, PublishResponse } from "../types.js";
 
 export const publishRoute = new Hono();
@@ -86,6 +87,13 @@ publishRoute.post("/publish", async (c) => {
     { artifact_id: artifactId, content_type: contentType, size_bytes: contentBuffer.length, ttl_seconds: ttl },
     "publish: artifact created",
   );
+
+  op.track("artifact_published", {
+    artifact_id: artifactId,
+    content_type: contentType,
+    size_bytes: contentBuffer.length,
+    ttl_seconds: ttl,
+  });
 
   const response: PublishResponse = {
     artifact_id: artifactId,

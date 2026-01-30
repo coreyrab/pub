@@ -9,6 +9,7 @@ import {
 import type { OgTags } from "../banner.js";
 import { CONFIG } from "../config.js";
 import { log } from "../logger.js";
+import { op } from "../analytics.js";
 
 /** Local mode: show Share button instead of static banner */
 const isLocalMode = CONFIG.BASE_URL.includes("localhost") || CONFIG.BASE_URL.includes("127.0.0.1");
@@ -38,6 +39,11 @@ serveRoute.get("/:id", async (c) => {
   }
 
   log.info({ artifact_id: id, content_type: meta.content_type }, "serve: artifact requested");
+
+  op.track("artifact_viewed", {
+    artifact_id: id,
+    content_type: meta.content_type,
+  });
 
   const content = await readArtifact(id);
   if (!content) {

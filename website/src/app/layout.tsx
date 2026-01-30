@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { OpenPanelComponent } from "@openpanel/nextjs";
 import { Nav } from "@/components/nav";
 import "./globals.css";
 
@@ -29,6 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <OpenPanelComponent
+          clientId="dca1a161-2da1-42a3-ae91-965da5b71670"
+          trackScreenViews={true}
+          trackAttributes={true}
+          trackOutgoingLinks={true}
+        />
         <Nav />
         {children}
       </body>
