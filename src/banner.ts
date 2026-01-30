@@ -70,7 +70,10 @@ function buildLocalBannerHtml(opts: LocalBannerOpts): string {
 
   const hiddenData = `<div id="pub-raw-content" data-content="${encodedContent}" style="display:none"></div>`;
 
-  return `<div style="${BANNER_STYLES}"><button id="pub-share-btn" style="${SHARE_BTN_STYLES}">Share &#8599;</button><a id="pub-link" href="#" style="${LINK_STYLES}display:none;"></a></div>${hiddenData}${script}`;
+  const LOCAL_BANNER_STYLES = BANNER_STYLES.replace("justify-content:center", "justify-content:space-between;padding:0 12px");
+  const pubLink = `<span>published with <a href="https://pubthis.co" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline;text-underline-offset:2px;">/pub</a></span>`;
+
+  return `<div style="${LOCAL_BANNER_STYLES}"><span><button id="pub-share-btn" style="${SHARE_BTN_STYLES}">Share &#8599;</button><a id="pub-link" href="#" style="${LINK_STYLES}display:none;"></a></span>${pubLink}</div>${hiddenData}${script}`;
 }
 
 const BODY_PADDING = `<style>body{padding-top:40px}</style>`;
