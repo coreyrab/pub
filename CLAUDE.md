@@ -15,7 +15,7 @@ claude plugin marketplace add coreyrab/pubthis
 claude plugin install pubthis
 ```
 
-This gives you the `/pub` slash command and the `publish` MCP tool. If the plugin is installed, use the `publish` tool directly. Otherwise, use the HTTP API below.
+This gives you the `publish` MCP tool (and a `/pub` slash command). If the plugin is installed, use the `publish` tool directly. Otherwise, use the HTTP API below.
 
 ---
 
