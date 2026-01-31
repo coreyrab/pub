@@ -10,13 +10,13 @@ export function Hero() {
         v0.1.0 — beta
       </Badge>
       <h1 className="font-mono text-4xl font-bold tracking-tight sm:text-5xl">
-        publish directly
+        publish your
         <br />
-        from Claude Code<span className="text-tomato">.</span>
+        Claude Code chats<span className="text-tomato">.</span>
       </h1>
       <p className="mt-4 max-w-lg font-mono text-base text-muted-foreground leading-relaxed">
-        Publish chats, markdown files, prototypes, and documents straight from
-        Claude Code to a temporary, shareable link.
+        Publish full Claude Code conversations, markdown files, prototypes, and
+        documents to a temporary, shareable link.
       </p>
     </section>
   );
