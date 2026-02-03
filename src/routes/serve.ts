@@ -31,8 +31,8 @@ serveRoute.get("/:id", async (c) => {
     return c.json({ error: "Not found" }, 404);
   }
 
-  // Lazy TTL enforcement
-  if (new Date(meta.expires_at).getTime() <= Date.now()) {
+  // Lazy TTL enforcement (pinned artifacts never expire)
+  if (!meta.pinned && new Date(meta.expires_at).getTime() <= Date.now()) {
     await deleteArtifact(id);
     log.info({ artifact_id: id }, "serve: expired artifact deleted (lazy)");
     return c.json({ error: "Not found" }, 404);

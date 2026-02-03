@@ -33,8 +33,7 @@ export default function DocsQuickstart() {
           <span className="text-foreground font-medium">
             &quot;share this as a link&quot;
           </span>{" "}
-          and pub handles the rest. There&apos;s also a direct HTTP API for
-          programmatic use.
+          and pub handles the rest.
         </p>
       </section>
 
@@ -177,55 +176,6 @@ export default function DocsQuickstart() {
 
       <Separator />
 
-      {/* Direct API */}
-      <section className="space-y-3">
-        <h2 className="font-mono text-lg font-semibold">
-          Direct API usage
-        </h2>
-        <p className="font-mono text-sm text-muted-foreground">
-          You can also call the pub API directly from any HTTP client, script,
-          or CI pipeline.
-        </p>
-        <pre className="overflow-x-auto rounded-lg bg-[#0A0A0A] p-3 font-mono text-xs leading-relaxed sm:p-4 sm:text-sm">
-          <code>
-            <span className="text-white">
-              {"curl -X POST https://pubthis.co/v1/publish \\"}
-            </span>
-            {"\n"}
-            <span className="text-white">{"  -H "}</span>
-            <span className="text-green-400">
-              {'"Content-Type: application/json"'}
-            </span>
-            <span className="text-white">{" \\"}</span>
-            {"\n"}
-            <span className="text-white">{"  -d "}</span>
-            <span className="text-green-400">{"'{"}</span>
-            {"\n"}
-            <span className="text-green-400">
-              {'    "content": "# My Report\\n\\nHello, world!",'}
-            </span>
-            {"\n"}
-            <span className="text-green-400">
-              {'    "content_type": "text/markdown"'}
-            </span>
-            {"\n"}
-            <span className="text-green-400">{"  }'"}</span>
-          </code>
-        </pre>
-        <p className="font-mono text-sm text-muted-foreground">
-          See the{" "}
-          <a
-            href="/docs/api"
-            className="text-tomato hover:underline"
-          >
-            API Reference
-          </a>{" "}
-          for the full request/response schema.
-        </p>
-      </section>
-
-      <Separator />
-
       {/* Alternative: CLAUDE.md */}
       <section className="space-y-3">
         <h2 className="font-mono text-lg font-semibold">
@@ -318,12 +268,8 @@ export default function DocsQuickstart() {
           ))}
         </div>
         <p className="font-mono text-sm text-muted-foreground">
-          Binary types (PDF, images) should be sent as base64-encoded strings in
-          the{" "}
-          <code className="rounded bg-secondary px-1.5 py-0.5 text-xs">
-            content
-          </code>{" "}
-          field.
+          Claude handles encoding and formatting automatically — just ask it to
+          publish.
         </p>
       </section>
     </div>

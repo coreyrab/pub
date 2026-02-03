@@ -14,11 +14,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-    {
-      url: "https://www.pubthis.co/docs/api",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
   ];
 }

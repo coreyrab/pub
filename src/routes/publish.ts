@@ -36,13 +36,31 @@ publishRoute.post("/publish", async (c) => {
     return c.json({ error: `Unsupported content type: ${contentType}` }, 415);
   }
 
-  // Resolve TTL
-  const ttl = body.ttl_seconds ?? CONFIG.DEFAULT_TTL_SECONDS;
-  if (!Number.isInteger(ttl) || ttl <= 0 || ttl > CONFIG.MAX_TTL_SECONDS) {
-    return c.json(
-      { error: `ttl_seconds must be an integer between 1 and ${CONFIG.MAX_TTL_SECONDS}` },
-      400,
-    );
+  // Check if pinned (admin-only)
+  const isPinned = body.pinned === true;
+  if (isPinned) {
+    const adminSecret = c.req.header("X-Admin-Secret");
+    if (!CONFIG.ADMIN_SECRET || adminSecret !== CONFIG.ADMIN_SECRET) {
+      return c.json({ error: "Unauthorized: admin secret required for pinned artifacts" }, 403);
+    }
+  }
+
+  // Resolve TTL (pinned artifacts bypass TTL entirely)
+  const now = new Date();
+  let ttl: number;
+  let expiresAt: Date;
+  if (isPinned) {
+    ttl = 0;
+    expiresAt = new Date("9999-12-31T23:59:59Z");
+  } else {
+    ttl = body.ttl_seconds ?? CONFIG.DEFAULT_TTL_SECONDS;
+    if (!Number.isInteger(ttl) || ttl <= 0 || ttl > CONFIG.MAX_TTL_SECONDS) {
+      return c.json(
+        { error: `ttl_seconds must be an integer between 1 and ${CONFIG.MAX_TTL_SECONDS}` },
+        400,
+      );
+    }
+    expiresAt = new Date(now.getTime() + ttl * 1000);
   }
 
   // Decode content
@@ -61,10 +79,8 @@ publishRoute.post("/publish", async (c) => {
     return c.json({ error: "Payload too large" }, 413);
   }
 
-  // Generate ID and timestamps
+  // Generate ID
   const artifactId = ulid();
-  const now = new Date();
-  const expiresAt = new Date(now.getTime() + ttl * 1000);
 
   // Extract OG metadata from text content
   const og = !isBinary
@@ -79,6 +95,7 @@ publishRoute.post("/publish", async (c) => {
     size_bytes: contentBuffer.length,
     og_title: og.og_title,
     og_description: og.og_description,
+    ...(isPinned && { pinned: true }),
   };
 
   await writeArtifact(artifactId, contentBuffer, meta);
@@ -100,6 +117,7 @@ publishRoute.post("/publish", async (c) => {
     url: `${CONFIG.BASE_URL}/a/${artifactId}`,
     expires_at: meta.expires_at,
     content_type: contentType,
+    ...(isPinned && { pinned: true }),
   };
 
   return c.json(response, 201);

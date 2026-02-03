@@ -32,4 +32,6 @@ export const CONFIG = {
 
   DISK_USAGE_THRESHOLD: 0.9, // reject publishes above 90% disk usage
   SHUTDOWN_DRAIN_MS: 10_000, // wait up to 10s for in-flight requests
+
+  ADMIN_SECRET: process.env.PUB_ADMIN_SECRET || "",
 } as const;

@@ -6,12 +6,14 @@ export interface ArtifactMeta {
   size_bytes: number;
   og_title?: string;
   og_description?: string;
+  pinned?: boolean;
 }
 
 export interface PublishRequest {
   content: string;
   content_type?: string;
   ttl_seconds?: number;
+  pinned?: boolean;
 }
 
 export interface PublishResponse {
@@ -19,4 +21,5 @@ export interface PublishResponse {
   url: string;
   expires_at: string;
   content_type: string;
+  pinned?: boolean;
 }

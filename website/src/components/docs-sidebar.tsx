@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/docs", label: "Quickstart" },
-  { href: "/docs/api", label: "API Reference" },
 ];
 
 export function DocsSidebar() {

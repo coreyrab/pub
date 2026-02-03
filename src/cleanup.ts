@@ -17,7 +17,7 @@ export function startCleanupLoop(): void {
       for (const id of ids) {
         try {
           const meta = await readMetadata(id);
-          if (meta && new Date(meta.expires_at).getTime() <= now) {
+          if (meta && !meta.pinned && new Date(meta.expires_at).getTime() <= now) {
             await deleteArtifact(id);
             deleted++;
           }

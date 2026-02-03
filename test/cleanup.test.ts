@@ -34,7 +34,7 @@ async function sweep() {
   const now = Date.now();
   for (const id of ids) {
     const meta = await readMetadata(id);
-    if (meta && new Date(meta.expires_at).getTime() <= now) {
+    if (meta && !meta.pinned && new Date(meta.expires_at).getTime() <= now) {
       await deleteArtifact(id);
     }
   }
@@ -53,6 +53,21 @@ describe("cleanup sweep", () => {
 
     await sweep();
     expect(await readMetadata("EXPIRED1")).toBeNull();
+  });
+
+  it("skips pinned artifacts during sweep", async () => {
+    const meta: ArtifactMeta = {
+      artifact_id: "PINNED01",
+      content_type: "text/plain",
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() - 1000).toISOString(), // technically expired
+      size_bytes: 6,
+      pinned: true,
+    };
+    await writeArtifact("PINNED01", Buffer.from("pinned"), meta);
+
+    await sweep();
+    expect(await readMetadata("PINNED01")).not.toBeNull();
   });
 
   it("keeps non-expired artifacts", async () => {

@@ -4,7 +4,7 @@ const features = [
   {
     title: "agent-native",
     description:
-      "Designed for AI coding agents. Add CLAUDE.md to your project and your agent can publish artifacts with zero setup.",
+      "Designed for Claude Code. Install the plugin and publish artifacts with natural language — zero config required.",
   },
   {
     title: "ephemeral",
@@ -14,7 +14,7 @@ const features = [
   {
     title: "any format",
     description:
-      "Markdown, HTML, plain text, PDFs, PNG, JPEG, WebP. One endpoint handles all of them.",
+      "Markdown, HTML, plain text, PDFs, PNG, JPEG, WebP. Claude handles the formatting — you just say \"share this.\"",
   },
 ];
 

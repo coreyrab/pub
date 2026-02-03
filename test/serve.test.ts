@@ -73,6 +73,23 @@ describe("GET /a/:id", () => {
     expect(res.status).toBe(404);
   });
 
+  it("serves pinned artifact even with past expires_at", async () => {
+    const meta: ArtifactMeta = {
+      artifact_id: VALID_ID,
+      content_type: "text/plain",
+      created_at: new Date().toISOString(),
+      expires_at: new Date(Date.now() - 1000).toISOString(), // technically expired
+      size_bytes: 6,
+      pinned: true,
+    };
+    await writeArtifact(VALID_ID, Buffer.from("pinned"), meta);
+
+    const app = createApp();
+    const res = await app.request(`/a/${VALID_ID}`);
+    expect(res.status).toBe(200);
+    expect(await res.text()).toBe("pinned");
+  });
+
   it("rejects invalid artifact ID format", async () => {
     const app = createApp();
     const res = await app.request("/a/NOT-A-VALID-ULID!");

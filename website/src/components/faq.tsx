@@ -25,14 +25,14 @@ const faqs = [
       "Markdown, HTML, plain text, PDF, PNG, JPEG, and WebP. Markdown is rendered with styling, HTML is served in a sandbox, and everything else is served as-is.",
   },
   {
-    question: "Do I need an API key?",
+    question: "Do I need to set anything up?",
     answer:
-      "No. pubthis has no authentication. Install the Claude Code plugin and start publishing.",
+      "Just install the Claude Code plugin and start publishing. No accounts, no API keys, no configuration.",
   },
   {
     question: "Can I self-host pubthis?",
     answer:
-      "Yes. Clone the repo, configure storage, and run the server. See the docs for details.",
+      "Yes. pubthis is open source. Clone the repo, run the server, and point the plugin at your instance. See the docs for details.",
   },
 ];
 

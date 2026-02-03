@@ -20,11 +20,21 @@ afterEach(async () => {
   (CONFIG as any).DATA_DIR = originalDataDir;
 });
 
-function publish(body: unknown) {
+let originalAdminSecret: string;
+
+beforeEach(() => {
+  originalAdminSecret = CONFIG.ADMIN_SECRET;
+});
+
+afterEach(() => {
+  (CONFIG as any).ADMIN_SECRET = originalAdminSecret;
+});
+
+function publish(body: unknown, headers?: Record<string, string>) {
   const app = createApp();
   return app.request("/v1/publish", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...headers },
     body: JSON.stringify(body),
   });
 }
@@ -74,5 +84,31 @@ describe("POST /v1/publish", () => {
   it("accepts custom TTL within limits", async () => {
     const res = await publish({ content: "x", ttl_seconds: 3600 });
     expect(res.status).toBe(201);
+  });
+
+  it("rejects pinned artifact without admin secret", async () => {
+    const res = await publish({ content: "pin me", pinned: true });
+    expect(res.status).toBe(403);
+  });
+
+  it("rejects pinned artifact with wrong admin secret", async () => {
+    (CONFIG as any).ADMIN_SECRET = "correct-secret";
+    const res = await publish(
+      { content: "pin me", pinned: true },
+      { "X-Admin-Secret": "wrong-secret" },
+    );
+    expect(res.status).toBe(403);
+  });
+
+  it("publishes pinned artifact with correct admin secret", async () => {
+    (CONFIG as any).ADMIN_SECRET = "test-secret";
+    const res = await publish(
+      { content: "pinned content", pinned: true },
+      { "X-Admin-Secret": "test-secret" },
+    );
+    expect(res.status).toBe(201);
+    const json = await res.json();
+    expect(json.pinned).toBe(true);
+    expect(json.expires_at).toBe("9999-12-31T23:59:59.000Z");
   });
 });
