@@ -12,28 +12,28 @@ const examples = [
     content_type: "markdown",
     description:
       "An engineering team's weekly status update with metrics, progress, and priorities.",
-    url: "https://pubthis.co/a/PLACEHOLDER_WEEKLY_REPORT",
+    url: "https://pubthis.co/a/01KGJ45792Q8D9KQD2JGM04YH8",
   },
   {
     title: "Landing Page Prototype",
     content_type: "html",
     description:
       "A self-contained HTML mockup of a product landing page with inline styling.",
-    url: "https://pubthis.co/a/PLACEHOLDER_HTML_PROTOTYPE",
+    url: "https://pubthis.co/a/01KGJ457JGF0X9Q9FPCD7P9W1X",
   },
   {
     title: "PR Review Summary",
     content_type: "markdown",
     description:
       "A structured code review with file-by-file analysis and severity labels.",
-    url: "https://pubthis.co/a/PLACEHOLDER_PR_REVIEW",
+    url: "https://pubthis.co/a/01KGJ457PXR3ENNCPXWV7P07WF",
   },
   {
     title: "Data Analysis Report",
     content_type: "markdown",
     description:
       "API usage analytics with tables, trend analysis, and ASCII visualizations.",
-    url: "https://pubthis.co/a/PLACEHOLDER_DATA_ANALYSIS",
+    url: "https://pubthis.co/a/01KGJ457V1GM3Z54ZFQ5GR0102",
   },
 ];
 
